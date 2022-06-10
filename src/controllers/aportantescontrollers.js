@@ -24,7 +24,7 @@ aportantescontrollers.listcat = async (req, res) => {
     const respuesta = await pool.query(consulta);
     res.json(respuesta.rows)
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -50,7 +50,7 @@ aportantescontrollers.aporficha = async (req, res) => {
     const respuesta = await pool.query(consulta);
     res.json(respuesta.rows)
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -77,7 +77,7 @@ aportantescontrollers.geticatbyid = async (req, res) => {
     const respuesta = await pool.query(consulta);
     res.json(respuesta.rows)
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -147,7 +147,7 @@ aportantescontrollers.geticatbyfiltro = async (req, res) => {
     //await workbook.xlsx.writeFile(path.join('reportes/reporte.xlsx'))
     res.json(respuesta.rows);
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -231,7 +231,7 @@ aportantescontrollers.geticatbyfiltro2 = async (req, res) => {
 
     res.json(respuesta.rows);
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -271,7 +271,7 @@ aportantescontrollers.geticatbyfiltropanel = async (req, res) => {
     const respuesta = await pool.query(consulta);
     res.json(respuesta.rows);
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
@@ -311,47 +311,71 @@ aportantescontrollers.geticatbyfiltropanel2 = async (req, res) => {
     const respuesta = await pool.query(consulta);
     res.json(respuesta.rows);
   } catch (error) {
-    res.json({ mensaje: "Error ejecutando el consulta" });
+    res.json([]);
   }
 }
 
 
 aportantescontrollers.getaportdep = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT idaportantes, apo.apo_nombre FROM aportantes INNER JOIN ciudades_idciudades=idciudades AND departamentos_iddepartamentos=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT idaportantes, apo.apo_nombre FROM aportantes INNER JOIN ciudades_idciudades=idciudades AND departamentos_iddepartamentos=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.getmacros  = async (req, res) => {
-  const respuesta = await pool.query("SELECT DISTINCT(ter_macrozona) FROM territorial ORDER BY ter_macrozona");
-  res.json(respuesta.rows)
+  try{
+    const respuesta = await pool.query("SELECT DISTINCT(ter_macrozona) FROM territorial ORDER BY ter_macrozona");
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.getterriid = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE terri.idterritorial=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE terri.idterritorial=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.getterrmacro = async (req, res) => {
-  var id = parseInt(req.params.id);
-  if(id==1){ id="Macrozona I"; }
-  if(id==2){ id="Macrozona II"; }
-  if(id==3){ id="Macrozona III"; }
+  try{
+    var id = parseInt(req.params.id);
+    if(id==1){ id="Macrozona I"; }
+    if(id==2){ id="Macrozona II"; }
+    if(id==3){ id="Macrozona III"; }
 
-  var consulta="SELECT idterritorial, ter_cod, ter_nombre FROM territorial WHERE ter_macrozona='"+id+"' ";
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+    var consulta="SELECT idterritorial, ter_cod, ter_nombre FROM territorial WHERE ter_macrozona='"+id+"' ";
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.getultid  = async (req, res) => {
-  const respuesta = await pool.query('SELECT idaportantes FROM aportantes ORDER BY idaportantes DESC LIMIT 1');
-  res.json(respuesta.rows)
+  try{
+    const respuesta = await pool.query('SELECT idaportantes FROM aportantes ORDER BY idaportantes DESC LIMIT 1');
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.getmaterrim  = async (req, res) => {
-  const respuesta = await pool.query('SELECT idterritorial, ter_cod, ter_nombre, ter_macrozona, idterritorial value, ter_nombre label  FROM territorial');
-  res.json(respuesta.rows)
+  try{
+    const respuesta = await pool.query('SELECT idterritorial, ter_cod, ter_nombre, ter_macrozona, idterritorial value, ter_nombre label  FROM territorial');
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.createter= async (req, res) => {
@@ -360,66 +384,101 @@ aportantescontrollers.createter= async (req, res) => {
       await pool.query('INSERT INTO territorial (ter_cod, ter_nombre, ter_macrozona, paises_idpaises) VALUES($1, $2, $3, $4)', [ter_cod, ter_nombre, ter_macrozona, paises_idpaises]);
       res.json({ mensaje: 'Territorial Registrada' })
   } catch (error) {
-      console.log(error);
-      res.json({ mensaje: "CAMPOS NO VALIDOS" })
+      res.json({ mensaje: "Error ejecutando el consulta" })
   }
 }
 
 aportantescontrollers.editaporsect = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { sectores_idsectores } = req.body;
-  await pool.query('UPDATE aportantes SET sectores_idsectores=$1 WHERE idaportantes=$2', [sectores_idsectores, id]);
-  res.json({ mensaje: 'Aportante editado' })
+  try{
+    const id = parseInt(req.params.id);
+    const { sectores_idsectores } = req.body;
+    await pool.query('UPDATE aportantes SET sectores_idsectores=$1 WHERE idaportantes=$2', [sectores_idsectores, id]);
+    res.json({ mensaje: 'Aportante editado' })
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.editaporclas = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { clasificaaportantes_idclasificaaportantes } = req.body;
-  await pool.query('UPDATE aportantes SET clasificaaportantes_idclasificaaportantes=$1 WHERE idaportantes=$2', [clasificaaportantes_idclasificaaportantes, id]);
-  res.json({ mensaje: 'Aportante editado' })
+  try{
+    const id = parseInt(req.params.id);
+    const { clasificaaportantes_idclasificaaportantes } = req.body;
+    await pool.query('UPDATE aportantes SET clasificaaportantes_idclasificaaportantes=$1 WHERE idaportantes=$2', [clasificaaportantes_idclasificaaportantes, id]);
+    res.json({ mensaje: 'Aportante editado' })
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.editter = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { ter_cod, ter_nombre, ter_macrozona, paises_idpaises } = req.body;
-  await pool.query('UPDATE territorial set ter_cod=$1, ter_nombre=$2, ter_macrozona=$3, paises_idpaises=$4 WHERE idterritorial=$5', [ter_cod, ter_nombre, ter_macrozona, paises_idpaises, id]);
-  res.json({ mensaje: 'Territoriales editadas' })
+  try{
+    const id = parseInt(req.params.id);
+    const { ter_cod, ter_nombre, ter_macrozona, paises_idpaises } = req.body;
+    await pool.query('UPDATE territorial set ter_cod=$1, ter_nombre=$2, ter_macrozona=$3, paises_idpaises=$4 WHERE idterritorial=$5', [ter_cod, ter_nombre, ter_macrozona, paises_idpaises, id]);
+    res.json({ mensaje: 'Territoriales editadas' })
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.getdepater = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT iddepartamentos, dep_nombre FROM departamentos WHERE territorial_idterritorial=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT iddepartamentos, dep_nombre FROM departamentos WHERE territorial_idterritorial=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbysector = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE sec.idsectores=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE sec.idsectores=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbyclasificacion = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE clasapor.idclasificaaportantes=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE clasapor.idclasificaaportantes=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbyesnom = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE enom.idestructuranomina=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE enom.idestructuranomina=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbytipoads = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE tipoads.idtipoadscrita=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE tipoads.idtipoadscrita=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbyciu = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE ciu.idciudades=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE ciu.idciudades=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 aportantescontrollers.geticatbydep = async (req, res) => {
   try {
@@ -427,72 +486,64 @@ aportantescontrollers.geticatbydep = async (req, res) => {
     const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE dep.iddepartamentos=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
-    console.log(error);
     res.json([]);
   }
 }
 
 aportantescontrollers.geticatbyterr = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE terr.idterritorial=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE terr.idterritorial=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.geticatbypais = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE pa.idpaises=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, apo_promedioibc,  tipoads.idtipoadscrita, tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM aportantes apo INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE pa.idpaises=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 aportantescontrollers.createcat = async (req, res) => {
-  //const respuesta = await pool.query('SELECT idaportantes INNER JOIN sectores sec ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE pa.idpaises=$1', [id]);
   const {idaportantes, apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc, estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades,tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados } = req.body;
   try{
     await pool.query('INSERT INTO aportantes (idaportantes, apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc, estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades,tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)', [idaportantes, apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc,  estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades,tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados]);
     res.json({ mensaje: 'Aporte registrado' })
-  }
-  catch(error){
+  } catch(error){
     res.json({mensaje: error+" CAMPOS NO VALIDOS"})
   }
 }
 
 aportantescontrollers.editcat = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const {apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc,  estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades,tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados } = req.body;
   try{
+    const id = parseInt(req.params.id);
+    const {apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc,  estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades,tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados } = req.body;
     await pool.query('UPDATE aportantes set apo_nombre=$1, apo_email=$2, apo_celular=$3, apo_identificacion=$4, apo_sufijo=$5, apo_direccion=$6, apo_replegal=$7, apo_ccreplegal=$8, apo_promedioibc=$9, estructuranomina_idestructuranomina=$10, clasificaaportantes_idclasificaaportantes=$11, sectores_idsectores=$12, ciudades_idciudades=$13, tipoadscrita_idtipoadscrita=$14, apo_sucursal=$15, apo_empleados=$16 WHERE idaportantes=$17', 
     [apo_nombre, apo_email, apo_celular, apo_identificacion, apo_sufijo, apo_direccion, apo_replegal, apo_ccreplegal, apo_promedioibc,  estructuranomina_idestructuranomina, clasificaaportantes_idclasificaaportantes, sectores_idsectores, ciudades_idciudades, tipoadscrita_idtipoadscrita, apo_sucursal, apo_empleados, id]);
     res.json({ mensaje: 'Aportante Editado' })
-
   }catch(error){
-    console.log(error);
     res.json({mensaje:"CAMPOS NO VALIDOS"})
   }
 }
 
 aportantescontrollers.delete = async (req,res) => {
-  const id = parseInt(req.params.id);
-
-  let nulo= null
-
-  
-  await pool.query('UPDATE responsables  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo,
-
-    id
-  ]);
-  await pool.query('UPDATE documentosaportantes  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo,
-
-    id
-  ]);
-
-  await pool.query('UPDATE aportesmunicipios  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo,
-
-    id
-  ]);
-   await pool.query('DELETE FROM aportantes WHERE idaportantes=$1', [id]);
-    
-res.json({mensaje:'aportante eliminado'})
-
+  try{
+    const id = parseInt(req.params.id);
+    let nulo= null
+    await pool.query('UPDATE responsables  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo,id]);
+    await pool.query('UPDATE documentosaportantes  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo,id]);
+    await pool.query('UPDATE aportesmunicipios  SET aportantes_idaportantes =$1 WHERE aportantes_idaportantes = $2', [nulo, id]);
+    await pool.query('DELETE FROM aportantes WHERE idaportantes=$1', [id]);
+    res.json({mensaje:'aportante eliminado'})
+  }catch(error){
+    res.json({mensaje:"CAMPOS NO VALIDOS"})
+  }
 }
 
 module.exports = aportantescontrollers;
