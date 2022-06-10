@@ -13,7 +13,6 @@ departamentoscontrollers.getidepbyid = async (req, res) => {
     const respuesta = await pool.query('SELECT dep.iddepartamentos, dep.dep_codigo, dep.dep_nombre,  terr.idterritorial, terr.ter_cod, terr.ter_nombre FROM territorial terr INNER JOIN departamentos dep ON dep.territorial_idterritorial=terr.idterritorial WHERE dep.iddepartamentos=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
-    console.log(error);
     res.json({ mensaje: "CAMPOS NO VALIDOS" });
   }
 }

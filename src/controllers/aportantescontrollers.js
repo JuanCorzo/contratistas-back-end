@@ -5,286 +5,314 @@ const path = require('path');
 const aportantescontrollers = {};
 
 aportantescontrollers.listcat = async (req, res) => {
-  var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
-  consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
-  consulta +="apo_promedioibc,  tipoads.idtipoadscrita, ";
-  consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
-  consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
-  consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
-  consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises  ";
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+  try {
+    var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
+    consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
+    consulta +="apo_promedioibc,  tipoads.idtipoadscrita, ";
+    consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
+    consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
+    consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
+    consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises  ";
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.aporficha = async (req, res) => {
-  const nit = parseInt(req.params.nit);
-  var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
-  consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
-  consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
-  consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
-  consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
-  consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
-  consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
-  consulta +=" WHERE apo_identificacion='"+nit+"'";
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+  try{
+    const nit = parseInt(req.params.nit);
+    var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
+    consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
+    consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
+    consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
+    consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
+    consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
+    consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
+    consulta +=" WHERE apo_identificacion='"+nit+"'";
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 
 aportantescontrollers.geticatbyid = async (req, res) => {
-  const id = parseInt(req.params.id);
-  var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
-  consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
-  consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
-  consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
-  consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
-  consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
-  consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, ter_macrozona, tad_descripcion, apo_sucursal, apo_empleados, apo_feccatipo, ";
-  consulta +="apo_feccasect, ciu_codigo, dep_codigo FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE apo.idaportantes="+id;
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
+    consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
+    consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
+    consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
+    consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
+    consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
+    consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, ter_macrozona, tad_descripcion, apo_sucursal, apo_empleados, apo_feccatipo, ";
+    consulta +="apo_feccasect, ciu_codigo, dep_codigo FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE apo.idaportantes="+id;
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.geticatbyfiltro = async (req, res) => {
-  const idsec = req.params.idsec;
-  const idesn = req.params.idesn;
-  const idcla = req.params.idcla;
-  const iddep = req.params.iddep;
-  const idciu = req.params.idciu;
-  var cuen = 0;
+  try{
+    const idsec = req.params.idsec;
+    const idesn = req.params.idesn;
+    const idcla = req.params.idcla;
+    const iddep = req.params.iddep;
+    const idciu = req.params.idciu;
+    var cuen = 0;
 
-  var consulta = "SELECT idaportantes, apo_nombre, apo_email, apo_celular, ";
-  consulta +="apo_direccion, apo_replegal, apo_ccreplegal, apo_sufijo, ";
-  consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
-  consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
-  consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
-  consulta +="ciu_nombre, dep.iddepartamentos, dep_nombre, terr.idterritorial, ter_nombre,";
-  consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect, ter_macrozona FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
-  if(idsec!="0"){ consulta +=" AND sec.idsectores="+idsec; cuen++; }
-  if(idesn!="0"){ consulta +=" AND enom.idestructuranomina="+idesn; cuen++; }
-  if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cuen++; }
-  if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cuen++; }
-  if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cuen++; }
-  //if(cuen==0){ 
-    //consulta += " LIMIT 50 ";  
-  //}
-  consulta +=" ORDER BY apo_identificacion, CAST(apo_sufijo AS INT)";
+    var consulta = "SELECT idaportantes, apo_nombre, apo_email, apo_celular, ";
+    consulta +="apo_direccion, apo_replegal, apo_ccreplegal, apo_sufijo, ";
+    consulta +="apo_promedioibc, tipoads.idtipoadscrita, ";
+    consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
+    consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
+    consulta +="ciu_nombre, dep.iddepartamentos, dep_nombre, terr.idterritorial, ter_nombre,";
+    consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo, apo_feccasect, ter_macrozona FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
+    if(idsec!="0"){ consulta +=" AND sec.idsectores="+idsec; cuen++; }
+    if(idesn!="0"){ consulta +=" AND enom.idestructuranomina="+idesn; cuen++; }
+    if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cuen++; }
+    if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cuen++; }
+    if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cuen++; }
+    //if(cuen==0){ 
+      //consulta += " LIMIT 50 ";  
+    //}
+    consulta +=" ORDER BY apo_identificacion, CAST(apo_sufijo AS INT)";
 
-  const respuesta = await pool.query(consulta);
-  const workbook = new Excel.Workbook();
-  const worksheet = workbook.addWorksheet('Reporte1');
-  const reporte1 = respuesta.rows;
-  worksheet.columns = [
-      { header: 'Id', key: 'idaportantes', width: 50 },
-      { header: 'Nombre', key: 'apo_nombre', width: 40 },
-      { header: 'Email', key: 'apo_email', width: 30 },
-      { header: 'Direccion', key: 'apo_direccion', width: 30 },
-      { header: 'Representante_legal', key: 'apo_replegal', width: 30 },
-      { header: 'Cedula_representante_legal', key: 'apo_ccreplegal', width: 30 },
-      { header: 'Sufijo', key: 'apo_sufijo', width: 30 },
-      { header: 'Promedio_IBC', key: 'apo_promedioibc', width: 30 },
-      { header: 'Telefono', key: 'apo_celular', width: 30 },
-      { header: 'Empleados', key: 'apo_empleados', width: 30 },
-      { header: 'Municipio', key: 'ciu_nombre', width: 30 },
-      { header: 'Departamento', key: 'dep_nombre', width: 30 },
-      { header: 'Territorial', key: 'ter_nombre', width: 30 },
-  ];
-  for (var i = 0; i < reporte1.length; ++i) {
-      await worksheet.addRow({ idaportantes: reporte1[i].idaportantes, 
-      apo_nombre: reporte1[i].apo_nombre, apo_email: reporte1[i].apo_email,
-      apo_direccion: reporte1[i].apo_direccion, apo_replegal: reporte1[i].apo_replegal,
-      apo_ccreplegal: reporte1[i].apo_ccreplegal, apo_sufijo: reporte1[i].apo_sufijo,
-      apo_promedioibc: reporte1[i].apo_promedioibc, ciu_nombre: reporte1[i].ciu_nombre,
-      apo_empleados: reporte1[i].apo_empleados, apo_email: reporte1[i].apo_email,
-      dep_nombre: reporte1[i].dep_nombre, ter_nombre: reporte1[i].ter_nombre
-      });
-  };
-  //await workbook.xlsx.writeFile(path.join('reportes/reporte.xlsx'))
-  res.json(respuesta.rows);
+    const respuesta = await pool.query(consulta);
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Reporte1');
+    const reporte1 = respuesta.rows;
+    worksheet.columns = [
+        { header: 'Id', key: 'idaportantes', width: 50 },
+        { header: 'Nombre', key: 'apo_nombre', width: 40 },
+        { header: 'Email', key: 'apo_email', width: 30 },
+        { header: 'Direccion', key: 'apo_direccion', width: 30 },
+        { header: 'Representante_legal', key: 'apo_replegal', width: 30 },
+        { header: 'Cedula_representante_legal', key: 'apo_ccreplegal', width: 30 },
+        { header: 'Sufijo', key: 'apo_sufijo', width: 30 },
+        { header: 'Promedio_IBC', key: 'apo_promedioibc', width: 30 },
+        { header: 'Telefono', key: 'apo_celular', width: 30 },
+        { header: 'Empleados', key: 'apo_empleados', width: 30 },
+        { header: 'Municipio', key: 'ciu_nombre', width: 30 },
+        { header: 'Departamento', key: 'dep_nombre', width: 30 },
+        { header: 'Territorial', key: 'ter_nombre', width: 30 },
+    ];
+    for (var i = 0; i < reporte1.length; ++i) {
+        await worksheet.addRow({ idaportantes: reporte1[i].idaportantes, 
+        apo_nombre: reporte1[i].apo_nombre, apo_email: reporte1[i].apo_email,
+        apo_direccion: reporte1[i].apo_direccion, apo_replegal: reporte1[i].apo_replegal,
+        apo_ccreplegal: reporte1[i].apo_ccreplegal, apo_sufijo: reporte1[i].apo_sufijo,
+        apo_promedioibc: reporte1[i].apo_promedioibc, ciu_nombre: reporte1[i].ciu_nombre,
+        apo_empleados: reporte1[i].apo_empleados, apo_email: reporte1[i].apo_email,
+        dep_nombre: reporte1[i].dep_nombre, ter_nombre: reporte1[i].ter_nombre
+        });
+    };
+    //await workbook.xlsx.writeFile(path.join('reportes/reporte.xlsx'))
+    res.json(respuesta.rows);
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.geticatbyfiltro2 = async (req, res) => {
-  const idcla = req.params.idcla;
-  const idesn = req.params.idesn;
-  const idsec = req.params.idsec;
-  var idmac = parseInt(req.params.idmac);
-  const idter = parseInt(req.params.idter);
-  const iddep = parseInt(req.params.iddep);
-  const idciu = parseInt(req.params.idciu);
-  const idora = req.params.idora;
-  var cont = 0;
-  if(idmac=="1"){ idmac="Macrozona I"; cont++; }
-  else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
-  else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
-  else { idmac="0"; }
-   
-  var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
-  consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
-  consulta +="apo_promedioibc,  tipoads.idtipoadscrita, ";
-  consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
-  consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
-  consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
-  consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo,";
-  consulta +=" apo_feccasect, ter_macrozona FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
-  if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
-  if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
-  if(idsec!="0"){ consulta +=" AND sec.idsectores IN ("+idsec+")"; cont++; }
-  if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
-  if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
-  if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
-  if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
-  if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
-  consulta +=" ORDER BY apo_identificacion, CAST(apo_sufijo AS INT)";
+  try{
+    const idcla = req.params.idcla;
+    const idesn = req.params.idesn;
+    const idsec = req.params.idsec;
+    var idmac = parseInt(req.params.idmac);
+    const idter = parseInt(req.params.idter);
+    const iddep = parseInt(req.params.iddep);
+    const idciu = parseInt(req.params.idciu);
+    const idora = req.params.idora;
+    var cont = 0;
+    if(idmac=="1"){ idmac="Macrozona I"; cont++; }
+    else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
+    else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
+    else { idmac="0"; }
+    
+    var consulta = "SELECT apo.idaportantes, apo.apo_nombre, apo.apo_email, apo.apo_celular, ";
+    consulta +="apo.apo_direccion, apo_replegal, apo_ccreplegal, apo.apo_sufijo, ";
+    consulta +="apo_promedioibc,  tipoads.idtipoadscrita, ";
+    consulta +="tipoads.tad_codigo, enom.idestructuranomina, enom.est_nombre, sec.idsectores, ";
+    consulta +="sec.sec_nombre, clasapor.idclasificaaportantes, clasapor.cla_nombre, ciu.idciudades, ";
+    consulta +="ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre,";
+    consulta +="pa.idpaises, pa.pai_nombre, apo_identificacion, apo_sucursal, apo_empleados, apo_feccatipo,";
+    consulta +=" apo_feccasect, ter_macrozona FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
+    if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
+    if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
+    if(idsec!="0"){ consulta +=" AND sec.idsectores IN ("+idsec+")"; cont++; }
+    if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
+    if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
+    if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
+    if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
+    if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
+    consulta +=" ORDER BY apo_identificacion, CAST(apo_sufijo AS INT)";
 
-  const respuesta = await pool.query(consulta);
+    const respuesta = await pool.query(consulta);
 
-  const workbook = new Excel.Workbook();
-  const worksheet = workbook.addWorksheet('Reporte1');
-  const reporte1 = respuesta.rows;
-  worksheet.columns = [
-      { header: 'Id', key: 'idaportantes', width: 50 },
-      { header: 'Nombre', key: 'apo_nombre', width: 40 },
-      { header: 'Email', key: 'apo_email', width: 30 },
-      { header: 'Direccion', key: 'apo_direccion', width: 30 },
-      { header: 'Representante_legal', key: 'apo_replegal', width: 30 },
-      { header: 'Cedula_representante_legal', key: 'apo_ccreplegal', width: 30 },
-      { header: 'Nit', key: 'apo_identificacion', width: 30 },
-      { header: 'Sufijo', key: 'apo_sufijo', width: 30 },
-      { header: 'Promedio_IBC', key: 'apo_promedioibc', width: 30 },
-      { header: 'Telefono', key: 'apo_celular', width: 30 },
-      { header: 'Empleados', key: 'apo_empleados', width: 30 },
-      { header: 'Municipio', key: 'ciu_nombre', width: 30 },
-      { header: 'Departamento', key: 'dep_nombre', width: 30 },
-      { header: 'Territorial', key: 'ter_nombre', width: 30 },
-  ];
-  for (var i = 0; i < reporte1.length; ++i) {
-      await worksheet.addRow({ idaportantes: reporte1[i].idaportantes, 
-      apo_nombre: reporte1[i].apo_nombre, apo_email: reporte1[i].apo_email,
-      apo_direccion: reporte1[i].apo_direccion, apo_replegal: reporte1[i].apo_replegal,
-      apo_ccreplegal: reporte1[i].apo_ccreplegal, apo_identificacion: reporte1[i].apo_identificacion,
-      apo_sufijo: reporte1[i].apo_sufijo,
-      apo_promedioibc: reporte1[i].apo_promedioibc, ciu_nombre: reporte1[i].ciu_nombre,
-      apo_empleados: reporte1[i].apo_empleados, apo_email: reporte1[i].apo_email,
-      dep_nombre: reporte1[i].dep_nombre, ter_nombre: reporte1[i].ter_nombre
-      });
-  };
-  //await workbook.xlsx.writeFile(path.join('reportes/reporte.xlsx'))
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Reporte1');
+    const reporte1 = respuesta.rows;
+    worksheet.columns = [
+        { header: 'Id', key: 'idaportantes', width: 50 },
+        { header: 'Nombre', key: 'apo_nombre', width: 40 },
+        { header: 'Email', key: 'apo_email', width: 30 },
+        { header: 'Direccion', key: 'apo_direccion', width: 30 },
+        { header: 'Representante_legal', key: 'apo_replegal', width: 30 },
+        { header: 'Cedula_representante_legal', key: 'apo_ccreplegal', width: 30 },
+        { header: 'Nit', key: 'apo_identificacion', width: 30 },
+        { header: 'Sufijo', key: 'apo_sufijo', width: 30 },
+        { header: 'Promedio_IBC', key: 'apo_promedioibc', width: 30 },
+        { header: 'Telefono', key: 'apo_celular', width: 30 },
+        { header: 'Empleados', key: 'apo_empleados', width: 30 },
+        { header: 'Municipio', key: 'ciu_nombre', width: 30 },
+        { header: 'Departamento', key: 'dep_nombre', width: 30 },
+        { header: 'Territorial', key: 'ter_nombre', width: 30 },
+    ];
+    for (var i = 0; i < reporte1.length; ++i) {
+        await worksheet.addRow({ idaportantes: reporte1[i].idaportantes, 
+        apo_nombre: reporte1[i].apo_nombre, apo_email: reporte1[i].apo_email,
+        apo_direccion: reporte1[i].apo_direccion, apo_replegal: reporte1[i].apo_replegal,
+        apo_ccreplegal: reporte1[i].apo_ccreplegal, apo_identificacion: reporte1[i].apo_identificacion,
+        apo_sufijo: reporte1[i].apo_sufijo,
+        apo_promedioibc: reporte1[i].apo_promedioibc, ciu_nombre: reporte1[i].ciu_nombre,
+        apo_empleados: reporte1[i].apo_empleados, apo_email: reporte1[i].apo_email,
+        dep_nombre: reporte1[i].dep_nombre, ter_nombre: reporte1[i].ter_nombre
+        });
+    };
+    //await workbook.xlsx.writeFile(path.join('reportes/reporte.xlsx'))
 
-  //res.json({ mensaje: consulta })
+    //res.json({ mensaje: consulta })
 
-  res.json(respuesta.rows);
+    res.json(respuesta.rows);
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.geticatbyfiltropanel = async (req, res) => {
-  const idcla = req.params.idcla;
-  const idesn = req.params.idesn;
-  const idsec = req.params.idsec;
-  var idmac = parseInt(req.params.idmac);
-  const idter = parseInt(req.params.idter);
-  const iddep = parseInt(req.params.iddep);
-  const idciu = parseInt(req.params.idciu);
-  const idora = req.params.idora;
-  var cont = 0;
-  if(idmac=="1"){ idmac="Macrozona I"; cont++; }
-  else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
-  else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
-  else { idmac="0"; }
-   
-  var consulta = "SELECT COUNT(*) total FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
-  if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
-  if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
-  if(idsec!="0"){ consulta +=" AND sec.idsectores IN ("+idsec+")"; cont++; }
-  if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
-  if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
-  if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
-  if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
-  if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows);
+  try{
+    const idcla = req.params.idcla;
+    const idesn = req.params.idesn;
+    const idsec = req.params.idsec;
+    var idmac = parseInt(req.params.idmac);
+    const idter = parseInt(req.params.idter);
+    const iddep = parseInt(req.params.iddep);
+    const idciu = parseInt(req.params.idciu);
+    const idora = req.params.idora;
+    var cont = 0;
+    if(idmac=="1"){ idmac="Macrozona I"; cont++; }
+    else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
+    else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
+    else { idmac="0"; }
+    
+    var consulta = "SELECT COUNT(*) total FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
+    if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
+    if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
+    if(idsec!="0"){ consulta +=" AND sec.idsectores IN ("+idsec+")"; cont++; }
+    if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
+    if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
+    if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
+    if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
+    if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows);
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 aportantescontrollers.geticatbyfiltropanel2 = async (req, res) => {
-  const idcla = req.params.idcla;
-  const idesn = req.params.idesn;
-  const idsec = req.params.idsec;
-  var idmac = parseInt(req.params.idmac);
-  const idter = parseInt(req.params.idter);
-  const iddep = parseInt(req.params.iddep);
-  const idciu = parseInt(req.params.idciu);
-  const idora = req.params.idora;
-  var cont = 0;
-  if(idmac=="1"){ idmac="Macrozona I"; cont++; }
-  else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
-  else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
-  else { idmac="0"; }
-   
-  var consulta = "SELECT COUNT(*) total FROM aportantes apo INNER JOIN sectores sec ";
-  consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
-  consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
-  consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
-  consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
-  consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
-  consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
-  consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
-  consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
-  if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
-  if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
-  consulta +=" AND sec.idsectores IN (1)"; cont++; 
-  if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
-  if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
-  if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
-  if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
-  if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows);
+  try{
+    const idcla = req.params.idcla;
+    const idesn = req.params.idesn;
+    const idsec = req.params.idsec;
+    var idmac = parseInt(req.params.idmac);
+    const idter = parseInt(req.params.idter);
+    const iddep = parseInt(req.params.iddep);
+    const idciu = parseInt(req.params.idciu);
+    const idora = req.params.idora;
+    var cont = 0;
+    if(idmac=="1"){ idmac="Macrozona I"; cont++; }
+    else if(idmac=="2"){ idmac="Macrozona II"; cont++; }
+    else if(idmac=="3"){ idmac="Macrozona III"; cont++; }
+    else { idmac="0"; }
+    
+    var consulta = "SELECT COUNT(*) total FROM aportantes apo INNER JOIN sectores sec ";
+    consulta +="ON apo.sectores_idsectores=sec.idsectores INNER JOIN clasificaaportantes clasapor ";
+    consulta +="ON apo.clasificaaportantes_idclasificaaportantes=clasapor.idclasificaaportantes ";
+    consulta +=" INNER JOIN estructuranomina enom ON apo.estructuranomina_idestructuranomina=enom.idestructuranomina ";
+    consulta +=" INNER JOIN tipoadscrita tipoads ON apo.tipoadscrita_idtipoadscrita=tipoads.idtipoadscrita ";
+    consulta +=" INNER JOIN ciudades ciu ON apo.ciudades_idciudades=ciu.idciudades ";
+    consulta +=" INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos ";
+    consulta +=" INNER JOIN territorial terr ON dep.territorial_idterritorial=terr.idterritorial ";
+    consulta +=" INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises ";
+    if(idcla!="0"){ consulta +=" AND idclasificaaportantes IN ("+idcla+")"; cont++; }
+    if(idesn!="0"){ consulta +=" AND enom.idestructuranomina IN ("+idesn+")"; cont++; }
+    consulta +=" AND sec.idsectores IN (1)"; cont++; 
+    if(idmac!="0"){ consulta +=" AND terr.ter_macrozona='"+idmac+"'"; cont++; }
+    if(idter!="0"){ consulta +=" AND terr.idterritorial IN ("+idter+")"; cont++; }
+    if(iddep!="0"){ consulta +=" AND dep.iddepartamentos="+iddep; cont++; }
+    if(idciu!="0"){ consulta +=" AND ciu.idciudades="+idciu; cont++; }
+    if(idora!="0"){ consulta +=" AND idtipoadscrita IN ("+idora+")"; cont++; }
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows);
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 
