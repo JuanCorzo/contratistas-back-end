@@ -9,32 +9,49 @@ const jwt = require('jsonwebtoken');
 const keys = require('../keys');
 
 const userscontrollers = {};
+
 userscontrollers.listuser = async (req, res) => {
-  const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles');
-  res.json(respuesta.rows )
+  try{
+    const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles');
+    res.json(respuesta.rows )
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
 }
-// listar ususarios por id
+
 userscontrollers.getuserbyid = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email ,u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND u.idusuarios=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email ,u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND u.idusuarios=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
 }
-// listar ususarios por rol
+
 userscontrollers.listuserpr = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND r.idroles=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND r.idroles=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
 }
+
 userscontrollers.edituser = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { roles_idroles, usu_nombre, usu_email, usu_celular,  usu_usuario, usu_password, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial } = req.body;
-  const editeduser = { roles_idroles, usu_nombre, usu_email, usu_celular,  usu_usuario, usu_password, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial};
-  const consul="";
-  var date = new Date();
-  var usu_fecha= date.getFullYear() + "/" + ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
-    ("00" + date.getDate()).slice(-2) + " " + ("00" + date.getHours()).slice(-2) + ":" +
-    ("00" + date.getMinutes()).slice(-2) + ":" + ("00" + date.getSeconds()).slice(-2);
   try {
+    const id = parseInt(req.params.id);
+    const { roles_idroles, usu_nombre, usu_email, usu_celular,  usu_usuario, usu_password, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial } = req.body;
+    const editeduser = { roles_idroles, usu_nombre, usu_email, usu_celular,  usu_usuario, usu_password, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial};
+    const consul="";
+    var date = new Date();
+    var usu_fecha= date.getFullYear() + "/" + ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+      ("00" + date.getDate()).slice(-2) + " " + ("00" + date.getHours()).slice(-2) + ":" +
+      ("00" + date.getMinutes()).slice(-2) + ":" + ("00" + date.getSeconds()).slice(-2);
     // comprobando si usuario existe
     const rows = await pool.query('SELECT roles_idroles,usu_nombre, usu_email, usu_usuario FROM usuarios WHERE idusuarios=$1', [id]);
     if (rows.rows.length > 0) {
@@ -65,35 +82,38 @@ userscontrollers.edituser = async (req, res) => {
     } else {
       res.json({ mensaje: 'El usuario que quiere editar no existe' })
     };
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error)
     res.json({ mensaje: 'campos no validos. No se pudo realizar la edición del usuario '+error + ' ' + consul })
   }
 }
 
 userscontrollers.edituser1 = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const {usu_nombre, usu_email, usu_celular, usu_password } = req.body;
-  const editeduser = { usu_nombre, usu_email, usu_celular, usu_password };
   try {
+    const id = parseInt(req.params.id);
+    const {usu_nombre, usu_email, usu_celular, usu_password } = req.body;
+    const editeduser = { usu_nombre, usu_email, usu_celular, usu_password };
     const rows = await pool.query('SELECT idusuarios FROM usuarios WHERE idusuarios=$1', [id]);
     if (rows.rows.length > 0) {
       editeduser.usu_password = await helpers.encryptPassword(usu_password);
       const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_password=$4 WHERE idusuarios=$5', [usu_nombre, usu_email, usu_celular, usu_password, id]);
         res.json({ mensaje:"usuario editado" })
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error)
     res.json({ mensaje: 'campos no validos. No se pudo realizar la edición del usuario' })
   }
 }
 
 userscontrollers.deleteuser = async (req, res) => {
-  const id = parseInt(req.params.id);
-  await pool.query('DELETE FROM usuarios  WHERE idusuarios =$1', [id]);
-  res.json({ mensaje: 'usuario eliminado' })
+  try{
+    const id = parseInt(req.params.id);
+    await pool.query('DELETE FROM usuarios  WHERE idusuarios =$1', [id]);
+    res.json({ mensaje: 'usuario eliminado' })
+  } catch (error) {
+    console.log(error)
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 
 module.exports = userscontrollers;
