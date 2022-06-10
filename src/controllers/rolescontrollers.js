@@ -9,21 +9,24 @@ rolescontrollers.listrole = async (req, res) => {
 }
 
 rolescontrollers.getrolebyid = async (req, res) => {
+  try{
   const id = parseInt(req.params.id);
   const respuesta = await pool.query('SELECT idroles, rol_nombre FROM roles WHERE idroles=$1', [id]);
 
   res.json(
     respuesta.rows
   )
-
+  } catch (error) {
+    res.json([]);
+  }
 
 }
 
 rolescontrollers.editrole = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { rol_nombre } = req.body;
-
+  
   try {
+    const id = parseInt(req.params.id);
+    const { rol_nombre } = req.body;
     await pool.query('UPDATE roles SET rol_nombre = $1 WHERE idroles = $2', [
       rol_nombre,
       id
@@ -44,9 +47,9 @@ rolescontrollers.editrole = async (req, res) => {
 rolescontrollers.createrole = async (req, res) => {
 
 
-  const { rol_nombre } = req.body;
-
+  
   try {
+    const { rol_nombre } = req.body;
     await pool.query('INSERT INTO roles (rol_nombre)  VALUES ($1)', [rol_nombre]);
 
     res.json({ mensaje: 'rol registrado' })
@@ -62,6 +65,7 @@ rolescontrollers.createrole = async (req, res) => {
 
 
 rolescontrollers.deleterole = async (req, res) => {
+  try{
   const id = parseInt(req.params.id);
   let nulo = null
   await pool.query('UPDATE usuarios  SET roles_idroles =$1 WHERE roles_idroles = $2', [nulo,
@@ -74,6 +78,8 @@ rolescontrollers.deleterole = async (req, res) => {
 
 
   res.json({ mensaje: 'rol eliminado' })
-
+  } catch (error) {
+    res.json({ mensaje: "Error ejecutando el consulta" });
+  }
 }
 module.exports = rolescontrollers;
