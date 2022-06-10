@@ -4,17 +4,25 @@ const pool = require('../database');
 const sedescontrollers = {};
 
 sedescontrollers.listcat = async (req, res) => {
-  const respuesta = await pool.query('SELECT s.idsedes, s.sed_codigo, s.sed_nombre, s.sed_direccion, s.ciudades_idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM sedes s INNER JOIN ciudades ciu on s.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial= terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises');
-  res.json(respuesta.rows)
+  try{
+    const respuesta = await pool.query('SELECT s.idsedes, s.sed_codigo, s.sed_nombre, s.sed_direccion, s.ciudades_idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM sedes s INNER JOIN ciudades ciu on s.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial= terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises');
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 
 }
 
 
 sedescontrollers.geticatbyid = async (req, res) => {
+  try{
     const id = parseInt(req.params.id);
   const respuesta = await pool.query('SELECT s.idsedes, s.sed_codigo, s.sed_nombre, s.sed_direccion, s.ciudades_idciudades, ciu.ciu_nombre, dep.iddepartamentos, dep.dep_nombre, terr.idterritorial, terr.ter_nombre, pa.idpaises, pa.pai_nombre FROM sedes s INNER JOIN ciudades ciu on s.ciudades_idciudades=ciu.idciudades INNER JOIN departamentos dep ON ciu.departamentos_iddepartamentos=dep.iddepartamentos INNER JOIN territorial terr ON dep.territorial_idterritorial= terr.idterritorial INNER JOIN paises pa ON terr.paises_idpaises=pa.idpaises WHERE  s.idsedes=$1', [id]);
 
   res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 
 
 }

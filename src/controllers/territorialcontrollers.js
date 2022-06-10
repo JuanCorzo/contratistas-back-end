@@ -4,29 +4,45 @@ const pool = require('../database');
 const territorialcontrollers = {};
 
 territorialcontrollers.listdep = async (req, res) => {
-  const consulta ="SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, ";
-  consulta +="terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON ";
-  consulta +="terri.paises_idpaises=pa.idpaises ";
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+  try{
+    const consulta ="SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, ";
+    consulta +="terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON ";
+    consulta +="terri.paises_idpaises=pa.idpaises ";
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 territorialcontrollers.listamacrozonas = async (req, res) => {
-  const consulta ="SELECT DISTINCT(ter_macrozona) FROM territorial ";
-  const respuesta = await pool.query(consulta);
-  res.json(respuesta.rows)
+  try{
+    const consulta ="SELECT DISTINCT(ter_macrozona) FROM territorial ";
+    const respuesta = await pool.query(consulta);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 territorialcontrollers.getidepbyid = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE terri.idterritorial=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE terri.idterritorial=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 territorialcontrollers.getidepbypais = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE pa.idpaises=$1', [id]);
-  res.json(respuesta.rows)
+  try{
+    const id = parseInt(req.params.id);
+    const respuesta = await pool.query('SELECT terri.idterritorial, terri.ter_cod, terri.ter_nombre, terri.ter_macrozona, pa.idpaises, pa.pai_nombre FROM territorial terri INNER JOIN paises pa ON terri.paises_idpaises=pa.idpaises WHERE pa.idpaises=$1', [id]);
+    res.json(respuesta.rows)
+  } catch (error) {
+    res.json([]);
+  }
 }
 
 territorialcontrollers.createdep= async (req, res) => {
