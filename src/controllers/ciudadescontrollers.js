@@ -10,7 +10,7 @@ ciudadescontrollers.listciu = async (req, res) => {
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);
-    res.json({mensaje: 'Error ejecutando la consulta'});
+    res.json([]);
   }
 }
 
@@ -21,7 +21,7 @@ ciudadescontrollers.geticiubyid = async (req, res) => {
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);
-    res.json({mensaje: 'Error ejecutando la consulta'});
+    res.json([]);
   }
 }
 
@@ -47,7 +47,7 @@ ciudadescontrollers.geticiubyterr= async (req, res) => {
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);
-    res.json({mensaje: 'Error ejecutando la consulta'});
+    res.json([]);
   }
 }
 
@@ -55,11 +55,10 @@ ciudadescontrollers.geticiubypa= async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const respuesta = await pool.query('SELECT c.idciudades, c.ciu_codigo, c.ciu_nombre, d.iddepartamentos, d.dep_nombre, terr.idterritorial, terr.ter_nombre, p.idpaises, p.pai_nombre FROM ciudades c INNER JOIN  departamentos d ON c.departamentos_iddepartamentos=d.iddepartamentos INNER JOIN territorial terr ON d.territorial_idterritorial=terr.idterritorial INNER JOIN paises p ON terr.paises_idpaises =p.idpaises WHERE p.idpaises=$1', [id]);
-
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);
-    res.json({mensaje: 'Error ejecutando la consulta'});
+    res.json([]);
   }
 }
 
