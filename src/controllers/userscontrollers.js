@@ -9,34 +9,39 @@ const jwt = require('jsonwebtoken');
 const keys = require('../keys');
 
 const userscontrollers = {};
+
 userscontrollers.listuser = async (req, res) => {
   try{
     const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles');
     res.json(respuesta.rows )
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
-// listar ususarios por id
+
 userscontrollers.getuserbyid = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
     const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email ,u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND u.idusuarios=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
-// listar ususarios por rol
+
 userscontrollers.listuserpr = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
     const respuesta = await pool.query('SELECT u.idusuarios, u.usu_nombre, u.usu_email, u.usu_celular, u.usu_fecha, u.usu_usuario, r.rol_nombre, u.roles_idroles, usu_fechainicio, usu_fechafin, usu_idmacrozona, usu_idterritorial FROM usuarios u JOIN roles r ON u.roles_idroles = r.idroles AND r.idroles=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
+
 userscontrollers.edituser = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -77,8 +82,7 @@ userscontrollers.edituser = async (req, res) => {
     } else {
       res.json({ mensaje: 'El usuario que quiere editar no existe' })
     };
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error)
     res.json({ mensaje: 'campos no validos. No se pudo realizar la edición del usuario '+error + ' ' + consul })
   }
@@ -95,8 +99,7 @@ userscontrollers.edituser1 = async (req, res) => {
       const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_password=$4 WHERE idusuarios=$5', [usu_nombre, usu_email, usu_celular, usu_password, id]);
         res.json({ mensaje:"usuario editado" })
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error)
     res.json({ mensaje: 'campos no validos. No se pudo realizar la edición del usuario' })
   }
@@ -108,6 +111,7 @@ userscontrollers.deleteuser = async (req, res) => {
     await pool.query('DELETE FROM usuarios  WHERE idusuarios =$1', [id]);
     res.json({ mensaje: 'usuario eliminado' })
   } catch (error) {
+    console.log(error)
     res.json({ mensaje: "Error ejecutando el consulta" });
   }
 }

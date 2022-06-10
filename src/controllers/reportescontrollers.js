@@ -1,9 +1,9 @@
 const pool = require('../database');
 
 const reportescontrollers = {};
+
 reportescontrollers.dashboard = async (req, res) => {
     try{
-
         var consulta ="SELECT (SELECT COUNT(*) FROM aportantes) aportantes, ";
         consulta +="(SELECT COUNT(*) FROM aportantes INNER JOIN clasificaaportantes ";
         consulta +="ON clasificaaportantes_idclasificaaportantes=idclasificaaportantes ";
@@ -20,10 +20,10 @@ reportescontrollers.dashboard = async (req, res) => {
         consulta +="(SELECT COUNT(*) FROM aportantes WHERE sectores_idsectores=14) adscritos,";
         consulta +="(SELECT COUNT(*) FROM aportantes WHERE clasificaaportantes_idclasificaaportantes=3) estudio,";
         consulta +="(SELECT COUNT(*) FROM aportantes WHERE clasificaaportantes_idclasificaaportantes=1) oblig2";
-
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
 }
@@ -44,6 +44,7 @@ reportescontrollers.zonarepo = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
 }
@@ -63,6 +64,7 @@ reportescontrollers.zonarepo2 = async (req, res) => {
         res.json(respuesta.rows);
         //res.json({ mensaje: consulta })
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
 }
@@ -79,13 +81,12 @@ reportescontrollers.geticatsinfiltro = async (req, res) => {
         consulta +="INNER JOIN sectores ON sectores_idsectores=idsectores ";
         consulta +="AND territorial_idterritorial=a.idterritorial AND sec_codigo='02') adscrita ";
         consulta +="FROM territorial a ";
-
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
-        res.json({ mensaje: "Error ejecutando el consulta" });
+        console.error(error);
+        res.json([]);
     }
-
 }
 
 reportescontrollers.geticatbyfiltro3 = async (req, res) => {
@@ -154,6 +155,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
   }
@@ -223,6 +225,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
   }
@@ -250,6 +253,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
   }
@@ -280,6 +284,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
   }
@@ -306,6 +311,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows);
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
   }
@@ -320,9 +326,9 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows)
     } catch (error) {
+        console.error(error);
         res.json([]);
     }
-  
   }
   
 module.exports = reportescontrollers;

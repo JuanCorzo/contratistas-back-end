@@ -8,6 +8,7 @@ tipoadscritacontrollers.listcat = async (req, res) => {
     const respuesta = await pool.query('SELECT idtipoadscrita, tad_codigo, tad_descripcion, idtipoadscrita value, tad_descripcion label FROM tipoadscrita');
     res.json(respuesta.rows )
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
@@ -18,6 +19,7 @@ tipoadscritacontrollers.geticatbyid = async (req, res) => {
     const respuesta = await pool.query('SELECT idtipoadscrita, tad_codigo, tad_descripcion FROM tipoadscrita WHERE idtipoadscrita=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
@@ -29,6 +31,7 @@ tipoadscritacontrollers.createcat = async (req, res) => {
     await pool.query('INSERT INTO tipoadscrita (tad_codigo, tad_descripcion) VALUES($1, $2)', [tad_codigo, tad_descripcion]);
     res.json({ mensaje: 'Tipo Adscrita registrada' })
   } catch (error) {
+    console.log(error)
     res.json({ mensaje: "Error ejecutando el consulta" });
   }
 }
@@ -40,6 +43,7 @@ tipoadscritacontrollers.editcat = async (req, res) => {
     await pool.query('UPDATE tipoadscrita set tad_codigo=$1, tad_descripcion=$2 WHERE idtipoadscrita=$3', [tad_codigo, tad_descripcion, id]);
     res.json({ mensaje: 'Tipo Adscrita editada' })
   } catch (error) {
+    console.log(error)
     res.json({ mensaje: "Error ejecutando el consulta" });
   }
 }
@@ -56,6 +60,7 @@ tipoadscritacontrollers.delete = async (req,res) => {
         
     res.json({mensaje:'tipo adscrita eliminada'})
   } catch (error) {
+    console.log(error)
     res.json({ mensaje: "Error ejecutando el consulta" });
   }
 }

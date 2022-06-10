@@ -6,6 +6,7 @@ tiposdocumentoscontrollers.listcat = async (req, res) => {
     const respuesta = await pool.query('SELECT idtiposdocumentos, tid_nombre, tid_clasifica, tid_aprobacion FROM tiposdocumentos');
     res.json(respuesta.rows )
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
@@ -16,6 +17,7 @@ tiposdocumentoscontrollers.geticatbyid = async (req, res) => {
     const respuesta = await pool.query('SELECT idtiposdocumentos, tid_nombre, tid_clasifica, tid_aprobacion FROM tiposdocumentos WHERE idtiposdocumentos=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
+    console.log(error)
     res.json([]);
   }
 }
@@ -23,11 +25,9 @@ tiposdocumentoscontrollers.geticatbyid = async (req, res) => {
 tiposdocumentoscontrollers.createcat = async (req, res) => {
   try{
     const {tid_nombre, tid_clasifica, tid_aprobacion} = req.body;
-    console.log(req.body)
     await pool.query('INSERT INTO tiposdocumentos (tid_nombre, tid_clasifica, tid_aprobacion) VALUES($1, $2, $3)', [tid_nombre, tid_clasifica, tid_aprobacion]);
     res.json({ mensaje: 'Tipo Documento Registrado' })
-  }
-  catch(error){
+  } catch(error){
       console.log(error);
       res.json({mensaje: "CAMPOS NO VALIDOS"})
   }
@@ -39,8 +39,7 @@ tiposdocumentoscontrollers.editcat = async (req, res) => {
     const {tid_nombre, tid_clasifica, tid_aprobacion} = req.body;
     await pool.query('UPDATE tiposdocumentos set tid_nombre=$1, tid_clasifica=$2, tid_aprobacion=$3 WHERE idtiposdocumentos=$4', [tid_nombre, tid_clasifica, tid_aprobacion, id]);
     res.json({ mensaje: 'Tipo documento Editado' })
-  }
-  catch(error){
+  } catch(error){
       console.log(error);
       res.json({mensaje: "CAMPOS NO VALIDOS"})
   }
@@ -54,6 +53,7 @@ tiposdocumentoscontrollers.delete = async (req,res) => {
     await pool.query('DELETE FROM tiposdocumentos WHERE idtiposdocumentos=$1', [id]);    
     res.json({mensaje:'tipo documento eliminado'})
   } catch (error) {
+    console.log(error)
     res.json({ mensaje: "Error ejecutando el consulta" });
   }
 }
