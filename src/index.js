@@ -5,13 +5,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 const path = require('path');
 
-
 // inicializations
 const app = express();
 
-
 // settings
-
 app.set('port', process.env.PORT || 4000);
 
 // Middelwares
