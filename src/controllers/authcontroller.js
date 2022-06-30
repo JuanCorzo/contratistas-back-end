@@ -60,7 +60,7 @@ authcontroller.login = async (req,res) => {
     try{
       // comprobando si usuario existe
       const rows = await pool.query('SELECT usu_email FROM usuarios WHERE usu_email=$1',[usu_email] );
-      console.log(rows.rows.length )
+      // console.log(rows.rows.length )
       if (rows.rows.length > 0) {
         res.json({mensaje: 'El usuario ya existe'});
       }else {

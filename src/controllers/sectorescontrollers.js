@@ -3,7 +3,17 @@ const sectorescontrollers = {};
 
 sectorescontrollers.listcat = async (req, res) => {
   try{
-    const respuesta = await pool.query('SELECT idsectores, sec_codigo, sec_nombre, idsectores value, sec_nombre label  FROM sectores ORDER BY sec_codigo');
+    const respuesta = await pool.query('SELECT idsectores, sec_codigo, sec_nombre FROM sectores ORDER BY sec_codigo');
+    res.json(respuesta.rows)
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
+}
+
+sectorescontrollers.listcatsel = async (req, res) => {
+  try{
+    const respuesta = await pool.query('SELECT idsectores value, sec_nombre label FROM sectores ORDER BY sec_codigo');
     res.json(respuesta.rows)
   } catch (error) {
     console.log(error)
@@ -14,7 +24,7 @@ sectorescontrollers.listcat = async (req, res) => {
 sectorescontrollers.geticatbyid = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
-    const respuesta = await pool.query('SELECT idsectores, sec_codigo , sec_nombre  FROM sectores WHERE idsectores=$1', [id]);
+    const respuesta = await pool.query('SELECT idsectores, sec_codigo, sec_nombre FROM sectores WHERE idsectores=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
     console.log(error)

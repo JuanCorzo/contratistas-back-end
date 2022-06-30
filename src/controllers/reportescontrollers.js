@@ -101,9 +101,9 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const repor = parseInt(req.params.repor);
         const idora = req.params.idora;
 
-        if(idmac=="1"){ idmac="Macrozona 1"; }
-        else if(idmac=="2"){ idmac="Macrozona 2"; }
-        else if(idmac=="3"){ idmac="Macrozona 3"; }
+        if(idmac=="1"){ idmac="Macrozona I"; }
+        else if(idmac=="2"){ idmac="Macrozona II"; }
+        else if(idmac=="3"){ idmac="Macrozona III"; }
         else { idmac="0"; }
     
         var consulta=""; var consulta2=""; 
@@ -172,9 +172,9 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
         const repor = parseInt(req.params.repor);
         const idora = req.params.idora;
 
-        if(idmac=="1"){ idmac="Macrozona 1"; }
-        else if(idmac=="2"){ idmac="Macrozona 2"; }
-        else if(idmac=="3"){ idmac="Macrozona 3"; }
+        if(idmac=="1"){ idmac="Macrozona I"; }
+        else if(idmac=="2"){ idmac="Macrozona II"; }
+        else if(idmac=="3"){ idmac="Macrozona III"; }
         else { idmac="0"; }
 
         var consulta2="";
@@ -299,7 +299,7 @@ reportescontrollers.geticatbyfiltro3 = async (req, res) => {
             consulta2+=" AND tra_tipo IN ('De obligada a no obligada', 'De no obligada a obligada', 'De en estudio de obligatoriedad a obligada', 'De en estudio de obligatoriedad a no obligada')";
         } 
         else {
-            consulta2+=" AND tra_tipo IN ('De NIT principal a sub unidad ejecutora del gasto')";
+            consulta2+=" AND tra_tipo IN ('De NIT principal a sub unidad ejecutora del gasto', 'De sub unidad ejecutora del gasto a NIT principal')";
         }
         var consulta=""; 
         consulta +="SELECT idtransicionesaportantes id, 'Transiciones' nombre, tra_ruta ruta, tra_fecha fecha, ";

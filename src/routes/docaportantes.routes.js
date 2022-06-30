@@ -8,6 +8,8 @@ const docaportantescontrollers= require('../controllers/docaportantescontrollers
 
 router.get('/descargaruno/:id', docaportantescontrollers.downloaduno);
 router.get('/downloadenla/:id', docaportantescontrollers.downloadenla);
+router.get('/downloadtran/:id', docaportantescontrollers.downloadtran);
+router.get('/downloadfaca/:id', docaportantescontrollers.downloadfaca);
 
 router.get('/descargardos', docaportantescontrollers.downloaddos);
 
@@ -18,6 +20,8 @@ router.post('/subirtran', documents.storagesingle, docaportantescontrollers.uplo
 
 router.get('/', docaportantescontrollers.listcat)
 router.get('/transiciones/:id', docaportantescontrollers.transiciones);
+router.get('/transicionesdocs/:id', docaportantescontrollers.transicionesdocs);
+router.get('/factoresdocs/:id', docaportantescontrollers.factoresdocs);
 
 router.get('/:id', docaportantescontrollers.docapoid)
 

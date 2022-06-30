@@ -16,7 +16,7 @@ responsablescontrollers.listcat = async (req, res) => {
 responsablescontrollers.geticatbyid = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
-    const respuesta = await pool.query('SELECT res.idresponsables, res.res_nombre, res.res_identificacion, res.res_cargo, res.res_email, res.res_telefono, apo.idaportantes, apo.apo_nombre, res_fecha FROM responsables res INNER JOIN aportantes apo ON res.aportantes_idaportantes=apo.idaportantes WHERE res.idresponsables=$1', [id]);
+    const respuesta = await pool.query('SELECT idresponsables, res_nombre, res_identificacion, res_cargo, res_email, res_telefono, res_fecha, res_documento FROM responsables WHERE idresponsables=$1', [id]);
     res.json(respuesta.rows);
   } catch (error) {
     console.error(error);
@@ -27,7 +27,7 @@ responsablescontrollers.geticatbyid = async (req, res) => {
 responsablescontrollers.geticatbyads = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
-    const respuesta = await pool.query('SELECT res.idresponsables, res.res_nombre, res.res_identificacion, res.res_cargo, res.res_email, res.res_telefono, apo.apo_nombre, res_fecha FROM responsables res INNER JOIN aportantes apo ON res.aportantes_idaportantes=apo.idaportantes WHERE apo.idaportantes=$1', [id]);
+    const respuesta = await pool.query('SELECT idresponsables, res_nombre, res_identificacion, res_cargo, res_email, res_telefono, apo_nombre, res_fecha FROM responsables INNER JOIN aportantes ON aportantes_idaportantes=idaportantes AND idaportantes=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);

@@ -1,3 +1,17 @@
+/*
+module.exports = {
+  database: {
+    host: 'localhost',
+    user:'postgres',
+    password:'password',
+    database:'esap', 
+    port:'5432',
+    //ssl: { rejectUnauthorized: false }
+  },
+  SECRET : 'CLAVE ULTRA SECRETA'
+};
+*/
+
 module.exports = {
   database: {
     host: 'ec2-54-204-56-171.compute-1.amazonaws.com',
@@ -9,3 +23,16 @@ module.exports = {
   },
   SECRET : 'CLAVE ULTRA SECRETA'
 };
+
+/*
+module.exports = { 
+  database: {
+    host: '172.16.202.199',
+    user:'adm_ley21',
+    password:'pWdL0g1n.',
+    database:'ley21',
+    port:'5432'
+  }
+  SECRET : 'CLAVE ULTRA SECRETA'
+}
+*/

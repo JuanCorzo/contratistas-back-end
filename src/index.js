@@ -5,13 +5,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 const path = require('path');
 
-
 // inicializations
 const app = express();
 
-
 // settings
-
 app.set('port', process.env.PORT || 4000);
 
 // Middelwares
@@ -41,7 +38,7 @@ app.use('/api/sedes', require('./routes/sedes.routes'));
 app.use('/api/aportesmunicipios', require('./routes/aportesmunicipios.routes'));
 app.use('/api/tiposdocumentos', require('./routes/tiposdocs.routes'));
 app.use('/api/documentosaportantes', require('./routes/docaportantes.routes'));
-app.use('/api/territoriales', require('./routes/terrotorial.routes'));
+app.use('/api/territorial', require('./routes/terrotorial.routes'));
 app.use('/api/tipoadscrita', require('./routes/tipoadsc.routes'));
 app.use('/api/reportes', require('./routes/reportes.routes'));
 

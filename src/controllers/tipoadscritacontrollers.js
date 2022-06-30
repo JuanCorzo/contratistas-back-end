@@ -5,7 +5,17 @@ const tipoadscritacontrollers = {};
 
 tipoadscritacontrollers.listcat = async (req, res) => {
   try{
-    const respuesta = await pool.query('SELECT idtipoadscrita, tad_codigo, tad_descripcion, idtipoadscrita value, tad_descripcion label FROM tipoadscrita');
+    const respuesta = await pool.query('SELECT idtipoadscrita, tad_codigo, tad_descripcion FROM tipoadscrita');
+    res.json(respuesta.rows )
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
+}
+
+tipoadscritacontrollers.listcatsel = async (req, res) => {
+  try{
+    const respuesta = await pool.query('SELECT idtipoadscrita value, tad_descripcion label FROM tipoadscrita');
     res.json(respuesta.rows )
   } catch (error) {
     console.log(error)

@@ -49,6 +49,16 @@ territorialcontrollers.getidepbypais = async (req, res) => {
   }
 }
 
+territorialcontrollers.getterritorial = async (req, res) => {
+  try{
+    const respuesta = await pool.query('SELECT idterritorial, ter_cod, ter_nombre, ter_macrozona FROM territorial ORDER BY ter_nombre');
+    res.json(respuesta.rows)
+  } catch (error) {
+    console.log(error)
+    res.json([]);
+  }
+}
+
 territorialcontrollers.createdep= async (req, res) => {
   try {
       const { ter_cod, ter_nombre, ter_macrozona, paises_idpaises } = req.body;
@@ -65,6 +75,7 @@ territorialcontrollers.editdep = async (req, res) => {
     const id = parseInt(req.params.id);
     const { ter_cod, ter_nombre, ter_macrozona, paises_idpaises } = req.body;
     await pool.query('UPDATE territorial set ter_cod=$1, ter_nombre=$2, ter_macrozona=$3, paises_idpaises=$4 WHERE idterritorial=$5', [ter_cod, ter_nombre, ter_macrozona, paises_idpaises, id]);
+    console.log("asdasd");
     res.json({ mensaje: 'Territoriales editadas' })
   } catch (error) {
     res.json({ mensaje: error + " CAMPOS NO VALIDOS" })

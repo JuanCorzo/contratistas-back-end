@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const territorialcontrollers= require('../controllers/territorialcontrollers');
 
-router.get('/', territorialcontrollers.listdep);
+router.get('/', territorialcontrollers.getterritorial);
 router.get('/:id',territorialcontrollers.getidepbyid) ;
 router.get('/pais/:id',territorialcontrollers.getidepbypais) ;
 router.put('/:id', territorialcontrollers.editdep);

@@ -73,9 +73,31 @@ docaportantescontrollers.downloaddos = async (req, res) => {
 docaportantescontrollers.downloadenla = async (req, res) => {
     try{
         const id = parseInt(req.params.id);
-        const respuesta = await pool.query('select res_documento, res_ndocumento FROM responsables WHERE idresponsables=$1', [id]);
-        console.log(__dirname, '../../' + respuesta.rows[0].apo_ruta);
-        res.download(path.join(__dirname, '../../' + respuesta.rows[0].apo_ruta));
+        const respuesta = await pool.query('SELECT res_documento, res_ndocumento FROM responsables WHERE idresponsables=$1', [id]);
+        console.log(__dirname, '../../' + respuesta.rows[0].res_documento);
+        res.download(path.join(__dirname, '../../' + respuesta.rows[0].res_documento));
+    } catch (error) {
+        console.error(error);
+        res.json({mensaje: 'Error ejecutando la consulta'});
+    }
+}
+
+docaportantescontrollers.downloadtran = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        const respuesta = await pool.query('select tra_tipo, tra_ruta FROM transicionesaportantes WHERE idtransicionesaportantes=$1', [id]);
+        res.download(path.join(__dirname, '../../' + respuesta.rows[0].tra_ruta));
+    } catch (error) {
+        console.error(error);
+        res.json({mensaje: 'Error ejecutando la consulta'});
+    }
+}
+
+docaportantescontrollers.downloadfaca = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        const respuesta = await pool.query('select faa_factores, faa_documento FROM factoresaportantes WHERE idfactoresaportantes=$1', [id]);
+        res.download(path.join(__dirname, '../../' + respuesta.rows[0].faa_documento));
     } catch (error) {
         console.error(error);
         res.json({mensaje: 'Error ejecutando la consulta'});
@@ -95,9 +117,35 @@ docaportantescontrollers.listcat = async (req, res) => {
 docaportantescontrollers.transiciones = async (req, res) => {
     try{
         const id = parseInt(req.params.id);
-        var consulta ="SELECT idtransicionesaportantes, tra_tipo, tra_fecha, usu_nombre, tra_observaciones ";
+        var consulta ="SELECT idtransicionesaportantes, tra_tipo, tra_fecha, usu_nombre, tra_observaciones, tra_ruta ";
         consulta +=" FROM transicionesaportantes INNER JOIN usuarios ON idusuarios=tra_usuario AND ";
         consulta += " aportantes_idaportantes='"+id+"'  "; 
+        const respuesta = await pool.query(consulta);
+        res.json(respuesta.rows)
+    } catch (error) {
+        console.error(error);
+        res.json([]);
+    }
+}
+
+docaportantescontrollers.transicionesdocs = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        var consulta ="SELECT idtransicionesaportantes, tra_tipo, tra_fecha, tra_observaciones, tra_ruta ";
+        consulta +=" FROM transicionesaportantes WHERE idtransicionesaportantes='"+id+"'  "; 
+        const respuesta = await pool.query(consulta);
+        res.json(respuesta.rows)
+    } catch (error) {
+        console.error(error);
+        res.json([]);
+    }
+}
+
+docaportantescontrollers.factoresdocs = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id);
+        var consulta ="SELECT idfactoresaportantes, faa_documento, faa_factores, faa_fechacrea FROM factoresaportantes ";
+        consulta +=" WHERE idfactoresaportantes='"+id+"'  "; 
         const respuesta = await pool.query(consulta);
         res.json(respuesta.rows)
     } catch (error) {

@@ -88,15 +88,63 @@ userscontrollers.edituser = async (req, res) => {
   }
 }
 
+
+userscontrollers.editamiusuario = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { usu_nombre, usu_email, usu_celular, usu_usuario, usu_password } = req.body;
+    const editeduser = { usu_nombre, usu_email, usu_celular,  usu_usuario, usu_password};
+    const consul="";
+    var date = new Date();
+    var usu_fecha= date.getFullYear() + "/" + ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+      ("00" + date.getDate()).slice(-2) + " " + ("00" + date.getHours()).slice(-2) + ":" +
+      ("00" + date.getMinutes()).slice(-2) + ":" + ("00" + date.getSeconds()).slice(-2);
+    // comprobando si usuario existe
+    const rows = await pool.query('SELECT roles_idroles,usu_nombre, usu_email, usu_usuario FROM usuarios WHERE idusuarios='+id);
+    if (rows.rows.length > 0) {
+      editeduser.usu_password = await helpers.encryptPassword(usu_password);
+      if (editeduser.roles_idroles) {
+       consul="UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_usuario=$4, usu_password=$5 WHERE idusuarios="+id;
+       const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_usuario=$4, usu_password=$5 WHERE idusuarios='+id, [usu_nombre, usu_email, usu_celular, usu_usuario, usu_password]);
+        editeduser.id = result.insertId;
+        const usertkn = {
+          id: editeduser.id,
+          rol: roles_idroles,
+          nombre: usu_nombre
+        }
+        const token = jwt.sign(usertkn, keys.SECRET, { expiresIn: 86400 })
+        await pool.query('UPDATE usuarios set usu_token=$1 WHERE idusuarios=$2', [token, editeduser.id])
+        res.json({ mensaje:"usuario editado" })
+      }
+      else {
+        editeduser.roles_idroles = 1;
+        const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_usuario=$4, usu_password=$5 WHERE idusuarios='+id, [usu_nombre, usu_email, usu_celular, usu_usuario, usu_password]);
+      
+        editeduser.id = result.insertId;
+        const token = jwt.sign({ id: newuser.id }, keys.SECRET, { expiresIn: 86400 })
+        console.log(token)
+        await pool.query('UPDATE usuarios set usu_token=$1 WHERE idusuarios=$2', [token, editeduser.id])
+        res.json({ mensaje:"usuario editado" })
+      }
+    } else {
+      res.json({ mensaje: 'El usuario que quiere editar no existe' })
+    };
+  } catch (error) {
+    console.log(error)
+    res.json({ mensaje: 'campos no validos. No se pudo realizar la edición del usuario '+error + ' ' + consul })
+  }
+}
+
+
 userscontrollers.edituser1 = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const {usu_nombre, usu_email, usu_celular, usu_password } = req.body;
-    const editeduser = { usu_nombre, usu_email, usu_celular, usu_password };
+    const {usu_nombre, usu_email, usu_password } = req.body;
+    const editeduser = { usu_nombre, usu_email, usu_password };
     const rows = await pool.query('SELECT idusuarios FROM usuarios WHERE idusuarios=$1', [id]);
     if (rows.rows.length > 0) {
-      editeduser.usu_password = await helpers.encryptPassword(usu_password);
-      const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_celular=$3, usu_password=$4 WHERE idusuarios=$5', [usu_nombre, usu_email, usu_celular, usu_password, id]);
+      const passw=editeduser.usu_password = await helpers.encryptPassword(usu_password);
+      const result = await pool.query('UPDATE usuarios SET usu_nombre=$1, usu_email=$2, usu_password=$3 WHERE idusuarios=$4', [usu_nombre, usu_email, passw, id]);
         res.json({ mensaje:"usuario editado" })
     }
   } catch (error) {

@@ -5,7 +5,7 @@ const clasificacionesaportantescontrolles = {};
 
 clasificacionesaportantescontrolles.listcat = async (req, res) => {
   try{
-    const respuesta = await pool.query('SELECT idclasificaaportantes, cla_codigo, cla_nombre, idclasificaaportantes value, cla_nombre label FROM clasificaaportantes ORDER BY cla_codigo');
+    const respuesta = await pool.query('SELECT idclasificaaportantes, cla_codigo, cla_nombre FROM clasificaaportantes ORDER BY cla_codigo');
     res.json(respuesta.rows )
   } catch (error) {
     console.error(error);
@@ -13,10 +13,21 @@ clasificacionesaportantescontrolles.listcat = async (req, res) => {
   }
 }
 
+clasificacionesaportantescontrolles.listcatsel = async (req, res) => {
+  try{
+    const respuesta = await pool.query('SELECT idclasificaaportantes value, cla_nombre label FROM clasificaaportantes ORDER BY cla_codigo');
+    res.json(respuesta.rows )
+  } catch (error) {
+    console.error(error);
+    res.json([]);
+  }
+}
+
+
 clasificacionesaportantescontrolles.geticatbyid = async (req, res) => {
   try{
     const id = parseInt(req.params.id);
-    const respuesta = await pool.query('SELECT idclasificaaportantes, cla_codigo, cla_nombre  FROM clasificaaportantes WHERE idclasificaaportantes=$1', [id]);
+    const respuesta = await pool.query('SELECT idclasificaaportantes, cla_codigo, cla_nombre FROM clasificaaportantes WHERE idclasificaaportantes=$1', [id]);
     res.json(respuesta.rows)
   } catch (error) {
     console.error(error);
